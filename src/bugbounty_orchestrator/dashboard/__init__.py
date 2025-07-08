@@ -1,0 +1,1 @@
+"""Web dashboard for the Bug Bounty Orchestrator"""

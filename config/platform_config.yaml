@@ -1,0 +1,163 @@
+---
+# Bug Bounty Orchestrator Configuration
+
+platform:
+  name: "Advanced Bug Bounty Orchestrator"
+  version: "1.0.0"
+  environment: "production"
+  
+# MCP Tools Configuration
+mcp_tools:
+  nuclei:
+    path: "../nuclei-mcp"
+    enabled: true
+    config:
+      templates_path: "/home/kali/nuclei-templates"
+      concurrency: 25
+      timeout: 30
+      severity: ["critical", "high", "medium", "low", "info"]
+      
+  httpx:
+    path: "../httpx-mcp"
+    enabled: true
+    config:
+      threads: 50
+      timeout: 10
+      follow_redirects: true
+      
+  amass:
+    path: "../amass-mcp"
+    enabled: true
+    config:
+      timeout: 3600
+      passive: true
+      active: false
+      
+  ffuf:
+    path: "../ffuf-mcp"
+    enabled: true
+    config:
+      threads: 40
+      wordlist: "/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt"
+      
+  nmap:
+    path: "../nmap-mcp"
+    enabled: true
+    config:
+      scan_type: "-sS"
+      top_ports: 1000
+      
+  sqlmap:
+    path: "../sqlmap-mcp"
+    enabled: true
+    config:
+      level: 3
+      risk: 2
+
+# Modern Tools Integration
+modern_tools:
+  bbot:
+    enabled: true
+    config:
+      modules:
+        - "subdomains"
+        - "portscan"
+        - "nuclei"
+        - "wayback"
+        - "shodan_dns"
+        - "github"
+        - "virustotal"
+      output_formats: ["neo4j", "json", "csv"]
+      
+  katana:
+    enabled: true
+    config:
+      headless: true
+      crawl_scope: "subs"
+      depth: 3
+      js_crawl: true
+      
+  alterx:
+    enabled: true
+    config:
+      patterns: ["{{sub}}-{{word}}.{{domain}}", "{{word}}.{{sub}}.{{domain}}"]
+      wordlist: "/usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-5000.txt"
+
+# Scanning Workflows
+workflows:
+  comprehensive_scan:
+    description: "Full comprehensive vulnerability assessment"
+    steps:
+      - subdomain_discovery
+      - port_scanning
+      - web_crawling
+      - vulnerability_scanning
+      - exploitation_testing
+      
+  passive_recon:
+    description: "Passive reconnaissance only"
+    steps:
+      - passive_subdomain_discovery
+      - passive_port_discovery
+      - certificate_transparency
+      - historical_data_analysis
+      
+  quick_scan:
+    description: "Quick vulnerability assessment"
+    steps:
+      - basic_subdomain_discovery
+      - http_probing
+      - basic_vulnerability_scanning
+
+# Platform Integrations
+platforms:
+  hackerone:
+    enabled: true
+    base_url: "https://api.hackerone.com"
+    rate_limit: 100  # requests per hour
+    
+  bugcrowd:
+    enabled: true
+    base_url: "https://api.bugcrowd.com"
+    rate_limit: 1000  # requests per hour
+    
+  intigriti:
+    enabled: true
+    base_url: "https://api.intigriti.com"
+    rate_limit: 500  # requests per hour
+
+# Reporting Configuration
+reporting:
+  formats: ["html", "pdf", "json", "xml"]
+  include_screenshots: true
+  include_payloads: true
+  severity_colors:
+    critical: "#FF0000"
+    high: "#FF6600"
+    medium: "#FFCC00"
+    low: "#00FF00"
+    info: "#0066FF"
+
+# Notification Settings
+notifications:
+  critical_findings: true
+  scan_completion: true
+  platform_submissions: true
+  channels:
+    - slack
+    - discord
+    - email
+
+# Security Settings
+security:
+  max_scan_time: 7200  # 2 hours
+  max_concurrent_scans: 5
+  rate_limiting: true
+  api_authentication: true
+  
+# Performance Tuning
+performance:
+  cache_ttl: 3600  # 1 hour
+  worker_threads: 10
+  memory_limit: "4GB"
+  cleanup_old_scans: 30  # days

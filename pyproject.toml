@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bugbounty-orchestrator"
+version = "1.0.0"
+description = "Comprehensive automated bug bounty platform with modern tools integration"
+authors = [{name = "Security Researcher", email = "researcher@example.com"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.5.0",
+    "httpx>=0.25.0",
+    "aiofiles>=23.2.1",
+    "rich>=13.7.0",
+    "typer>=0.9.0",
+    "asyncio-mqtt>=0.16.1",
+    "sqlalchemy>=2.0.23",
+    "alembic>=1.13.0",
+    "redis>=5.0.1",
+    "celery>=5.3.4",
+    "neo4j>=5.15.0",
+    "elasticsearch>=8.11.0",
+    "jinja2>=3.1.2",
+    "beautifulsoup4>=4.12.2",
+    "playwright>=1.40.0",
+    "shodan>=1.30.1",
+    "dnspython>=2.4.2",
+    "requests>=2.31.0",
+    "pyyaml>=6.0.1",
+    "python-multipart>=0.0.6",
+    "websockets>=12.0",
+    "schedule>=1.2.1",
+    "python-dotenv>=1.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-asyncio>=0.21.1",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "mypy>=1.7.1",
+    "pre-commit>=3.6.0"
+]
+
+[project.scripts]
+bb-orchestrator = "bugbounty_orchestrator.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
